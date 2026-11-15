@@ -46,3 +46,13 @@ When I'm not engineering or studying I play Tetris on [TETR.IO](https://ch.tetr.
 ## About the site
 
 One page, built with Vite, React 19, TypeScript and Tailwind CSS v4. All text and links live in `src/content.ts`.
+
+### SEO
+
+The build adds a canonical link, Open Graph and Twitter tags pointing at the social card (`public/og-image.png`), schema.org `Person` and `WebSite` JSON-LD, `robots.txt` and `sitemap.xml`. These need the production address, so build with it set:
+
+```bash
+SITE_URL=https://your-domain.example npm run build
+```
+
+On Vercel the production domain is picked up automatically. Without it, the absolute-URL tags and the sitemap are skipped. After deploying, submit `/sitemap.xml` in Google Search Console.
