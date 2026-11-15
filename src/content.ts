@@ -13,14 +13,14 @@ export const person = {
 
 export const roles = [
   {
-    id: "U1",
+    id: "hardware",
     title: "Hardware Engineer",
     org: "HubTech KZ",
     href: "https://hubtech.kz",
     body: "Designing and soldering the electronics side of real products: boards, wiring, sensors, and the bring-up that makes them talk.",
   },
   {
-    id: "U2",
+    id: "team",
     title: "Captain, robotics team Pulsar",
     org: "@pulsar.ftc",
     href: "https://instagram.com/pulsar.ftc/",

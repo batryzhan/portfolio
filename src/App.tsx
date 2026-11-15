@@ -5,7 +5,7 @@ import { Roles } from "./sections/Roles";
 import { Projects } from "./sections/Projects";
 import { Achievements } from "./sections/Achievements";
 import { Journey } from "./sections/Journey";
-import { OffDuty } from "./sections/OffDuty";
+// import { OffDuty } from "./sections/OffDuty";
 import { Contact } from "./sections/Contact";
 
 export default function App() {
@@ -25,7 +25,7 @@ export default function App() {
         <Projects />
         <Achievements />
         <Journey />
-        <OffDuty />
+        {/* <OffDuty /> */}
         <Contact />
       </main>
     </>
