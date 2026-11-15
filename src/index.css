@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/* Narrowed stand-in while Big Shoulders loads, so the hero name never clips. */
+@font-face {
+  font-family: "Big Shoulders Fallback";
+  src: local("Arial Narrow"), local("Arial");
+  size-adjust: 74%;
+  ascent-override: 105%;
+}
+
+/* Palette: a populated circuit board.
+   Solder-mask green carries the surface, ENIG gold is the signal,
+   silkscreen white is the type. One alarm red is reserved for failure. */
+@theme {
+  --color-mask-deep: oklch(0.205 0.045 163);
+  --color-mask: oklch(0.255 0.055 161);
+  --color-mask-raised: oklch(0.305 0.06 160);
+  --color-trace: oklch(0.47 0.07 150);
+  --color-gold: oklch(0.82 0.125 86);
+  --color-gold-dim: oklch(0.66 0.1 84);
+  --color-silk: oklch(0.965 0.012 120);
+  --color-silk-dim: oklch(0.82 0.025 150);
+  --color-fault: oklch(0.68 0.19 30);
+
+  --font-display: "Big Shoulders Display", "Big Shoulders Fallback", sans-serif;
+  --font-sans: "Geist", ui-sans-serif, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+:root {
+  color-scheme: dark;
+  background: var(--color-mask-deep);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-mask);
+  /* Via grid + faint copper pour, like an unpopulated board seen up close. */
+  background-image:
+    radial-gradient(circle at 1px 1px, oklch(0.4 0.06 155 / 0.55) 1px, transparent 1.6px),
+    radial-gradient(120% 80% at 85% -10%, oklch(0.33 0.07 150 / 0.9), transparent 60%),
+    radial-gradient(90% 60% at -10% 110%, oklch(0.18 0.04 165), transparent 70%);
+  background-size: 24px 24px, 100% 100%, 100% 100%;
+  color: var(--color-silk);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: oklch(0.82 0.125 86 / 0.25);
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-mask-deep);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* A gold trace that draws itself under links on hover/focus. */
+.trace-link {
+  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.35s var(--ease-out-quart), color 0.2s;
+}
+.trace-link:hover,
+.trace-link:focus-visible {
+  background-size: 100% 1px;
+  color: var(--color-gold);
+}
+
+/* Section designator, printed like silkscreen next to a footprint. */
+.designator {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--color-gold-dim);
+  letter-spacing: 0.02em;
+}
+
+/* Hero name: one orchestrated reveal on load. */
+@keyframes rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.rise {
+  display: block;
+  animation: rise 0.9s var(--ease-out-quart) both;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+.fade-in {
+  animation: fade-in 0.8s ease-out both;
+}
+
+/* Tetris well: pieces fall in on view. */
+@keyframes drop {
+  from {
+    transform: translateY(-260%);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
