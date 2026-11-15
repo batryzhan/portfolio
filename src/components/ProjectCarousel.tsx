@@ -8,19 +8,10 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel"
+import type { ProjectSlide } from "@/content"
 import { cn } from "@/lib/utils"
 
-export type ProjectSlide = {
-  /** 960px-wide WebP */
-  src: string
-  /** Large WebP and its real pixel width (for srcset). */
-  srcLarge: string
-  largeWidth: number
-  width: number
-  height: number
-  alt: string
-  caption: string
-}
+export type { ProjectSlide }
 
 function SlideImage({ slide, index }: { slide: ProjectSlide; index: number }) {
   return (

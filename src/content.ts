@@ -1,5 +1,3 @@
-import type { ProjectSlide } from "./components/ProjectCarousel";
-
 export const person = {
   name: "Batyrzhan Amanbek",
   first: "Batyrzhan",
@@ -29,6 +27,18 @@ export const roles = [
     body: "Leading a FIRST Tech Challenge team: splitting the build, keeping the code honest, and getting the robot to the field on time.",
   },
 ];
+
+export type ProjectSlide = {
+  /** 960px-wide WebP */
+  src: string;
+  /** Large WebP and its real pixel width (for srcset). */
+  srcLarge: string;
+  largeWidth: number;
+  width: number;
+  height: number;
+  alt: string;
+  caption: string;
+};
 
 export type Project = {
   id: string;

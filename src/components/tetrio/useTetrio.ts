@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { hardDrop, hold, move, newGame, pps, rotate, softDrop, step, type GameState } from "@/lib/tetris";
+import { COLS, hardDrop, hold, move, newGame, pps, rotate, softDrop, step, VISIBLE_ROWS, type GameState } from "@/lib/tetris";
 
 /** TETR.IO-like handling defaults. */
 const DAS_MS = 133;
@@ -27,6 +27,8 @@ export function useTetrio() {
   const gameRef = useRef(game);
   const statusRef = useRef(status);
   const held = useRef<Held>(releasedKeys());
+  /** Attach to the widget root: keys are read from it, so starting a game must focus it. */
+  const rootRef = useRef<HTMLDivElement>(null);
 
   const setStatus = useCallback((next: Status) => {
     statusRef.current = next;
@@ -59,6 +61,8 @@ export function useTetrio() {
       setAnnouncement("");
     }
     setStatus("playing");
+    // e.g. after "Play again" the clicked button unmounts and focus would fall to <body>.
+    rootRef.current?.focus({ preventScroll: true });
   }, [setStatus]);
 
   const pause = useCallback(() => {
@@ -78,12 +82,12 @@ export function useTetrio() {
           let next = step(s, dt);
           const h = held.current;
           if (h.dir !== null && now >= h.nextShift) {
-            const shifts = Math.min(COLS_MAX, Math.floor((now - h.nextShift) / ARR_MS) + 1);
+            const shifts = Math.min(COLS, Math.floor((now - h.nextShift) / ARR_MS) + 1);
             for (let i = 0; i < shifts; i++) next = move(next, h.dir);
             h.nextShift += shifts * ARR_MS;
           }
           if (h.down && now >= h.nextDrop) {
-            const drops = Math.min(ROWS_MAX, Math.floor((now - h.nextDrop) / SOFT_DROP_MS) + 1);
+            const drops = Math.min(VISIBLE_ROWS, Math.floor((now - h.nextDrop) / SOFT_DROP_MS) + 1);
             for (let i = 0; i < drops; i++) next = softDrop(next);
             h.nextDrop += drops * SOFT_DROP_MS;
           }
@@ -171,14 +175,12 @@ export function useTetrio() {
     }
   };
 
-  /** One-shot action for touch buttons; ignored unless a game is running. */
+  /** One-shot action for touch buttons; the first tap on an idle/paused board starts it. */
   const act = (action: (s: GameState) => GameState) => {
     if (statusRef.current === "playing") apply(action);
+    else if (statusRef.current !== "over") start();
   };
 
-  return { game, status, announcement, start, pause, act, onKeyDown, onKeyUp };
+  return { rootRef, game, status, announcement, start, pause, act, onKeyDown, onKeyUp };
 }
 
-/** Upper bounds per frame so a stalled frame can't loop forever. */
-const COLS_MAX = 10;
-const ROWS_MAX = 20;

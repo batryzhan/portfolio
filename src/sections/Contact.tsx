@@ -59,7 +59,8 @@ export function Contact() {
             <li key={link.href} className="bg-background">
               <ExternalLink
                 href={link.href}
-                className="flex min-h-20 flex-col justify-center gap-0.5 px-5 py-4 transition-colors hover:bg-accent [background-size:0]"
+                underline={false}
+                className="flex min-h-20 flex-col justify-center gap-0.5 px-5 py-4 transition-colors hover:bg-accent"
               >
                 <span className="font-medium">{link.label}</span>
                 <span className="font-mono text-sm text-muted-foreground">{link.handle}</span>

@@ -41,7 +41,7 @@ describe("Tetris engine", () => {
     expect(hold(held)).toEqual(held);
     const locked = hardDrop(held);
     const swapped = hold(locked);
-    expect(swapped.active).toEqual({ kind: first, rotation: 0, x: 3, y: 0 });
+    expect(swapped.active).toEqual({ kind: first, rotation: 0, x: 3, y: BUFFER_ROWS - 1 });
     expect(swapped.hold).toBe(locked.active.kind);
   });
   it("ghost matches the hard-drop landing position", () => {
@@ -91,4 +91,22 @@ it("uses the existing upward 180 kick when the direct rotation is obstructed", (
   const result = rotate(state, 2);
   expect(result.active.rotation).toBe(2);
   expect(result.active.y).toBe(4);
+});
+
+describe("spawn, lock out and no-op identity", () => {
+  it("spawns with part of the piece already in the visible field", () => {
+    const state = newGame(() => 0);
+    const lowest = Math.max(...cellsOf(state.active.kind, 0).map(([, y]) => state.active.y + y));
+    expect(lowest).toBeGreaterThanOrEqual(BUFFER_ROWS);
+  });
+  it("tops out when a piece locks entirely in the hidden buffer (lock out)", () => {
+    const state = withPiece(newGame(() => 0), "O", 3, 0);
+    // Fill the top visible row under the O so it rests in buffer rows 0-1.
+    for (let x = 0; x < COLS; x++) if (x !== 0) state.board[BUFFER_ROWS][x] = "Z";
+    expect(hardDrop(state).gameOver).toBe(true);
+  });
+  it("returns the same state object for a blocked move", () => {
+    const state = withPiece(newGame(() => 0), "O", -1, BUFFER_ROWS); // O cells sit at x+1..x+2, so this is flush left
+    expect(move(state, -1)).toBe(state);
+  });
 });

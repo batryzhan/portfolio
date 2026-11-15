@@ -85,7 +85,8 @@ const IK: Record<string, Point[]> = {
   "0>3": [[0,0],[-1,0],[2,0],[-1,-2],[2,1]],
 };
 const HALF: Point[] = [[0,0],[0,-1],[1,0],[-1,0],[0,1]];
-const spawn = (kind: PieceKind): Piece => ({ kind, rotation: 0, x: 3, y: 0 });
+// Spawn straddling the skyline (rows 1-2) so the piece is visible at once, as in TETR.IO.
+const spawn = (kind: PieceKind): Piece => ({ kind, rotation: 0, x: 3, y: BUFFER_ROWS - 1 });
 const fits = (board: GameState["board"], piece: Piece): boolean =>
   cellsOf(piece.kind, piece.rotation).every(([x, y]) => {
     const col = piece.x + x, row = piece.y + y;
@@ -120,11 +121,11 @@ function reposition(state: GameState, active: Piece, rotated: boolean): GameStat
     lockMs: reset ? 0 : state.lockMs, lockResets: state.lockResets + (reset ? 1 : 0) };
 }
 export function move(state: GameState, dx: number): GameState {
-  if (state.gameOver || (dx !== -1 && dx !== 1)) return { ...state };
-  return { ...reposition(state, { ...state.active, x: state.active.x + dx }, false) };
+  if (state.gameOver || (dx !== -1 && dx !== 1)) return state;
+  return reposition(state, { ...state.active, x: state.active.x + dx }, false);
 }
 export function rotate(state: GameState, dir: 1 | -1 | 2): GameState {
-  if (state.gameOver) return { ...state };
+  if (state.gameOver) return state;
   const from = state.active.rotation, to = ((from + dir + 4) % 4) as Rotation;
   const kicks = state.active.kind === "O" ? [[0, 0] as Point] : dir === 2 ? HALF :
     (state.active.kind === "I" ? IK : JL)[`${from}>${to}`];
@@ -132,11 +133,11 @@ export function rotate(state: GameState, dir: 1 | -1 | 2): GameState {
     const piece = { ...state.active, rotation: to, x: state.active.x + x, y: state.active.y + y };
     if (fits(state.board, piece)) return reposition(state, piece, true);
   }
-  return { ...state };
+  return state;
 }
 export function softDrop(state: GameState): GameState {
   const active = { ...state.active, y: state.active.y + 1 };
-  return state.gameOver || !fits(state.board, active) ? { ...state } : { ...state, active, lastRotation: false };
+  return state.gameOver || !fits(state.board, active) ? state : { ...state, active, lastRotation: false };
 }
 export function ghostY(state: GameState): number {
   let y = state.active.y;
@@ -151,8 +152,10 @@ function lock(state: GameState): GameState {
     const col = active.x + x, row = active.y + y;
     return col < 0 || col >= COLS || row >= ROWS || (row >= 0 && board[row][col] !== null);
   }).length >= 3;
-  let above = false;
-  for (const [x, y] of cellsOf(active.kind, active.rotation)) {
+  const shape = cellsOf(active.kind, active.rotation);
+  // Lock out: the whole piece came to rest in the hidden buffer rows.
+  let above = shape.every(([, y]) => active.y + y < BUFFER_ROWS);
+  for (const [x, y] of shape) {
     if (active.y + y < 0) above = true;
     else board[active.y + y][active.x + x] = active.kind;
   }
@@ -165,12 +168,12 @@ function lock(state: GameState): GameState {
   return above ? { ...next, gameOver: true } : nextPiece(next);
 }
 export function hardDrop(state: GameState): GameState {
-  if (state.gameOver) return { ...state };
+  if (state.gameOver) return state;
   const y = ghostY(state);
   return lock({ ...state, active: { ...state.active, y } });
 }
 export function hold(state: GameState): GameState {
-  if (state.gameOver || !state.canHold) return { ...state };
+  if (state.gameOver || !state.canHold) return state;
   const held = state.active.kind;
   if (state.hold === null) return nextPiece({ ...state, hold: held, canHold: false });
   const active = spawn(state.hold);
@@ -179,7 +182,7 @@ export function hold(state: GameState): GameState {
 }
 /** Advance gravity and grounded lock delay in chronological order. */
 export function step(state: GameState, dtMs: number): GameState {
-  if (state.gameOver || !Number.isFinite(dtMs) || dtMs <= 0) return { ...state };
+  if (state.gameOver || !Number.isFinite(dtMs) || dtMs <= 0) return state;
   let s = { ...state, elapsedMs: state.elapsedMs + dtMs };
   let remaining = dtMs;
   while (remaining > 0 && !s.gameOver) {

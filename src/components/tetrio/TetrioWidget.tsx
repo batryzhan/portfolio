@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from "react";
+import { memo, type CSSProperties, type ReactNode } from "react";
 import { ArrowDownToLine, ChevronLeft, ChevronRight, RotateCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -91,7 +91,8 @@ function Stat({ name, value }: { name: string; value: string }) {
   );
 }
 
-function Matrix({ game }: { game: GameState }) {
+/** Memoized on the pieces only, so the per-frame TIME/PPS updates don't repaint 200 cells. */
+const Matrix = memo(function Matrix({ game }: { game: GameState }) {
   const shape = cellsOf(game.active.kind, game.active.rotation);
   const landing = ghostY(game);
   const active = new Set(shape.map(([x, y]) => `${game.active.x + x},${game.active.y + y}`));
@@ -121,7 +122,7 @@ function Matrix({ game }: { game: GameState }) {
       })}
     </div>
   );
-}
+}, (a, b) => a.game.board === b.game.board && a.game.active === b.game.active && a.game.gameOver === b.game.gameOver);
 
 const KEYS: [string, string][] = [
   ["← →", "move"],
@@ -136,7 +137,7 @@ const KEYS: [string, string][] = [
 
 /** A playable, TETR.IO-style mini game: 10x20 matrix, 7-bag, SRS, ghost, hold and a five-piece next queue. */
 export function TetrioWidget({ className }: { className?: string }) {
-  const { game, status, announcement, start, pause, act, onKeyDown, onKeyUp } = useTetrio();
+  const { rootRef, game, status, announcement, start, pause, act, onKeyDown, onKeyUp } = useTetrio();
   const playing = status === "playing";
 
   const overlay = {
@@ -148,6 +149,7 @@ export function TetrioWidget({ className }: { className?: string }) {
 
   return (
     <div
+      ref={rootRef}
       tabIndex={0}
       role="application"
       aria-roledescription="game"
