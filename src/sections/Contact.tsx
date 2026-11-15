@@ -26,48 +26,32 @@ export function Contact() {
   return (
     <section id="contact" aria-labelledby="contact-title" className="mt-12 bg-muted px-4 pb-10 pt-20 sm:px-8 md:pt-28">
       <div className="mx-auto max-w-6xl">
-        <div className="grid items-center gap-10 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-14">
-          <div>
-            <h2 id="contact-title" className="max-w-3xl text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[1.02]">
-              Building something with robots or LLMs? Let&rsquo;s talk.
-            </h2>
+        <h2 id="contact-title" className="max-w-3xl text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[1.02]">
+          Building something with robots or LLMs? Let&rsquo;s talk.
+        </h2>
 
-            <div className="mt-10 flex flex-wrap items-center gap-3">
-              <Button asChild size="lg" className="h-12 px-5 text-base">
-                <a href={`mailto:${person.email}`}>{person.email}</a>
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <Button asChild size="lg" className="h-12 px-5 text-base">
+            <a href={`mailto:${person.email}`}>{person.email}</a>
+          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="size-12 bg-background"
+                onClick={copy}
+                aria-label="Copy email address"
+              >
+                {copied ? <Check className="text-primary" /> : <Copy />}
               </Button>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="icon"
-                    className="size-12 bg-background"
-                    onClick={copy}
-                    aria-label="Copy email address"
-                  >
-                    {copied ? <Check className="text-primary" /> : <Copy />}
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>{copied ? "Copied" : "Copy email"}</TooltipContent>
-              </Tooltip>
-              <span className="sr-only" aria-live="polite">
-                {copied ? "Email address copied" : ""}
-              </span>
-            </div>
-          </div>
-
-          <img
-            src="/images/renders/workbench-640.webp"
-            srcSet="/images/renders/workbench-640.webp 640w, /images/renders/workbench-1200.webp 1200w"
-            sizes="(min-width: 768px) 440px, 100vw"
-            alt="Illustration of a workbench with a soldering iron, a purple circuit board, a laptop, a small robot and headphones."
-            width={640}
-            height={427}
-            loading="lazy"
-            decoding="async"
-            className="aspect-[3/2] w-full rounded-2xl border bg-white object-contain"
-          />
+            </TooltipTrigger>
+            <TooltipContent>{copied ? "Copied" : "Copy email"}</TooltipContent>
+          </Tooltip>
+          <span className="sr-only" aria-live="polite">
+            {copied ? "Email address copied" : ""}
+          </span>
         </div>
 
         <ul className="mt-14 grid gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-2 lg:grid-cols-5">
