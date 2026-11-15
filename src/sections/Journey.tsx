@@ -3,7 +3,7 @@ import { journey } from "../content";
 
 export function Journey() {
   return (
-    <Section id="journey" designator="J4" title="Robotics journey">
+    <Section id="journey" title="My Journey">
       <ol className="grid gap-x-8 gap-y-16 md:grid-cols-2">
         {journey.map((item, i) => (
           <li key={item.src} className={i % 2 === 1 ? "md:mt-24" : ""}>

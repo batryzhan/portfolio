@@ -67,7 +67,7 @@ function TetrisWell() {
 
 export function OffDuty() {
   return (
-    <Section id="off-duty" designator="TP1" title="Off duty">
+    <Section id="off-duty" title="Off duty">
       <div className="grid gap-14 md:grid-cols-2 md:gap-20">
         <div className="space-y-6 text-lg">
           <p className="max-w-[48ch] text-silk">

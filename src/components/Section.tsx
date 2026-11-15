@@ -1,29 +1,26 @@
 import type { ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 type SectionProps = {
   id: string;
-  designator: string;
   title: string;
+  /** One sentence under the heading that says what the section holds. */
+  lede?: ReactNode;
   children: ReactNode;
   className?: string;
 };
 
-/** A board region: silkscreen designator, heading, and a gold trace on the left edge. */
-export function Section({ id, designator, title, children, className = "" }: SectionProps) {
+/** Page section: heading + optional lede on the left rail, content to the right on wide screens. */
+export function Section({ id, title, lede, children, className }: SectionProps) {
   const headingId = `${id}-title`;
   return (
-    <section id={id} aria-labelledby={headingId} className={`relative px-4 py-24 sm:px-8 md:py-32 ${className}`}>
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-12 flex items-baseline gap-4 border-b border-trace/60 pb-4 md:mb-16">
-          <span className="designator" aria-hidden="true">
-            {designator}
-          </span>
-          <h2
-            id={headingId}
-            className="font-display text-5xl font-bold leading-none tracking-tight text-silk sm:text-6xl md:text-7xl"
-          >
+    <section id={id} aria-labelledby={headingId} className={cn("px-4 py-20 sm:px-8 md:py-28", className)}>
+      <div className="mx-auto max-w-6xl border-t pt-8 md:pt-10">
+        <div className="mb-10 max-w-2xl md:mb-14">
+          <h2 id={headingId} className="text-4xl font-semibold leading-[1.05] sm:text-5xl">
             {title}
           </h2>
+          {lede ? <p className="mt-4 text-lg text-muted-foreground">{lede}</p> : null}
         </div>
         {children}
       </div>

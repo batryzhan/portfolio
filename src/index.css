@@ -1,120 +1,147 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/schibsted-grotesk";
+@import "@fontsource-variable/jetbrains-mono";
 
-/* Narrowed stand-in while Big Shoulders loads, so the hero name never clips. */
-@font-face {
-  font-family: "Big Shoulders Fallback";
-  src: local("Arial Narrow"), local("Arial");
-  size-adjust: 74%;
-  ascent-override: 105%;
+/*
+  Design system: white paper, near-black ink, one violet.
+  Violet (#7C3AED) is reserved for state — links on hover, active controls,
+  first-place results, the T piece. Everything else is ink and greys.
+*/
+:root {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --card-foreground: #09090b;
+  --popover: #ffffff;
+  --popover-foreground: #09090b;
+  --primary: #7c3aed;
+  --primary-foreground: #ffffff;
+  --secondary: #f4f4f5;
+  --secondary-foreground: #18181b;
+  --muted: #fafafa;
+  --muted-foreground: #52525b;
+  --accent: #f5f3ff;
+  --accent-foreground: #5b21b6;
+  --destructive: #dc2626;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #7c3aed;
+  --radius: 0.75rem;
+
+  /* Tetromino colors: the guideline hues, tuned to sit on white. */
+  --piece-i: #22b8cf;
+  --piece-o: #f5b82e;
+  --piece-t: #7c3aed;
+  --piece-s: #3cb371;
+  --piece-z: #e5484d;
+  --piece-j: #3b6fe0;
+  --piece-l: #f2853a;
 }
 
-/* Palette: a populated circuit board.
-   Solder-mask green carries the surface, ENIG gold is the signal,
-   silkscreen white is the type. One alarm red is reserved for failure. */
-@theme {
-  --color-mask-deep: oklch(0.205 0.045 163);
-  --color-mask: oklch(0.255 0.055 161);
-  --color-mask-raised: oklch(0.305 0.06 160);
-  --color-trace: oklch(0.47 0.07 150);
-  --color-gold: oklch(0.82 0.125 86);
-  --color-gold-dim: oklch(0.66 0.1 84);
-  --color-silk: oklch(0.965 0.012 120);
-  --color-silk-dim: oklch(0.82 0.025 150);
-  --color-fault: oklch(0.68 0.19 30);
+@theme inline {
+  --font-sans: "Schibsted Grotesk Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-sans);
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
 
-  --font-display: "Big Shoulders Display", "Big Shoulders Fallback", sans-serif;
-  --font-sans: "Geist", ui-sans-serif, sans-serif;
-  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-piece-i: var(--piece-i);
+  --color-piece-o: var(--piece-o);
+  --color-piece-t: var(--piece-t);
+  --color-piece-s: var(--piece-s);
+  --color-piece-z: var(--piece-z);
+  --color-piece-j: var(--piece-j);
+  --color-piece-l: var(--piece-l);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
 
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-:root {
-  color-scheme: dark;
-  background: var(--color-mask-deep);
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-feature-settings: "ss01";
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+    letter-spacing: -0.025em;
+  }
+  a,
+  button {
+    touch-action: manipulation;
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-foreground);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 3px;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-  scroll-padding-top: 5rem;
-}
-
-body {
-  margin: 0;
-  background-color: var(--color-mask);
-  /* Via grid + faint copper pour, like an unpopulated board seen up close. */
-  background-image:
-    radial-gradient(circle at 1px 1px, oklch(0.4 0.06 155 / 0.55) 1px, transparent 1.6px),
-    radial-gradient(120% 80% at 85% -10%, oklch(0.33 0.07 150 / 0.9), transparent 60%),
-    radial-gradient(90% 60% at -10% 110%, oklch(0.18 0.04 165), transparent 70%);
-  background-size: 24px 24px, 100% 100%, 100% 100%;
-  color: var(--color-silk);
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-}
-
-a,
-button {
-  touch-action: manipulation;
-  -webkit-tap-highlight-color: oklch(0.82 0.125 86 / 0.25);
-}
-
-h1,
-h2,
-h3 {
-  text-wrap: balance;
-}
-
-::selection {
-  background: var(--color-gold);
-  color: var(--color-mask-deep);
-}
-
-:focus-visible {
-  outline: 2px solid var(--color-gold);
-  outline-offset: 3px;
-  border-radius: 2px;
-}
-
-/* A gold trace that draws itself under links on hover/focus. */
-.trace-link {
-  background-image: linear-gradient(var(--color-gold), var(--color-gold));
+/* Underline that grows in on hover/focus for inline text links. */
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
   background-size: 0% 1px;
   background-position: 0 100%;
   background-repeat: no-repeat;
-  transition: background-size 0.35s var(--ease-out-quart), color 0.2s;
+  transition:
+    background-size 0.3s var(--ease-out-quart),
+    color 0.2s;
 }
-.trace-link:hover,
-.trace-link:focus-visible {
+.link-underline:hover,
+.link-underline:focus-visible {
   background-size: 100% 1px;
-  color: var(--color-gold);
+  color: var(--primary);
 }
 
-/* Section designator, printed like silkscreen next to a footprint. */
-.designator {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--color-gold-dim);
-  letter-spacing: 0.02em;
-}
-
-/* Hero name: one orchestrated reveal on load. */
+/* The one orchestrated moment: the hero name rises on load. */
 @keyframes rise {
   from {
     transform: translateY(105%);
-  }
-  to {
-    transform: translateY(0);
   }
 }
 .rise {
   display: block;
   animation: rise 0.9s var(--ease-out-quart) both;
 }
-
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -122,17 +149,6 @@ h3 {
 }
 .fade-in {
   animation: fade-in 0.8s ease-out both;
-}
-
-/* Tetris well: pieces fall in on view. */
-@keyframes drop {
-  from {
-    transform: translateY(-260%);
-    opacity: 0;
-  }
-  60% {
-    opacity: 1;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

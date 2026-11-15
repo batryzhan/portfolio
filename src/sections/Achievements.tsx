@@ -44,7 +44,7 @@ function useCountUp(target: number, duration = 1400) {
 export function Achievements() {
   const [ref, value] = useCountUp(TOTAL_PRIZE);
   return (
-    <Section id="achievements" designator="J3" title="Achievements">
+    <Section id="achievements" title="Achievements">
       <p className="mb-14 max-w-3xl font-display text-[clamp(2.5rem,7vw,5.5rem)] font-bold leading-[0.95] text-silk">
         <span ref={ref} className="text-gold tabular-nums">
           {fmt.format(value)}

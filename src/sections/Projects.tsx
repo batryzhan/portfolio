@@ -60,7 +60,7 @@ const illustrations: Record<string, ReactElement> = {
 
 export function Projects() {
   return (
-    <Section id="projects" designator="J2" title="Projects">
+    <Section id="projects" title="Projects">
       <div className="space-y-6">
         {projects.map((project) => (
           <article

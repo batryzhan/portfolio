@@ -27,7 +27,7 @@ const rows: { k: string; v: string }[] = [
 
 export function About() {
   return (
-    <Section id="about" designator="U3" title="Datasheet">
+    <Section id="about" title="About">
       <div className="grid gap-14 md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] md:gap-20">
         <figure className="relative mx-3 max-w-sm md:mx-0">
           <Pins side="left" />
