@@ -2,12 +2,14 @@ import type { Plugin } from "vite";
 
 /**
  * Production URL used for the canonical link, Open Graph URLs, the sitemap and structured data.
- * Set SITE_URL at build time (e.g. SITE_URL=https://example.com npm run build). On Vercel the
- * production domain is picked up automatically. Without a URL the absolute-URL tags are skipped
- * rather than pointing search engines at a wrong address.
+ * Defaults to the custom domain so the *.vercel.app address never becomes the canonical one.
+ * Override with SITE_URL at build time (e.g. SITE_URL=https://example.com npm run build);
+ * set SITE_URL to an empty string to skip the absolute-URL tags.
  */
+const DEFAULT_SITE_URL = "https://batryzhan.online";
+
 function resolveSiteUrl(): string | undefined {
-  const raw = process.env.SITE_URL ?? (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "");
+  const raw = process.env.SITE_URL ?? DEFAULT_SITE_URL;
   return raw ? raw.replace(/\/+$/, "") : undefined;
 }
 

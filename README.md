@@ -49,10 +49,4 @@ One page, built with Vite, React 19, TypeScript and Tailwind CSS v4. All text an
 
 ### SEO
 
-The build adds a canonical link, Open Graph and Twitter tags pointing at the social card (`public/og-image.png`), schema.org `Person` and `WebSite` JSON-LD, `robots.txt` and `sitemap.xml`. These need the production address, so build with it set:
-
-```bash
-SITE_URL=https://your-domain.example npm run build
-```
-
-On Vercel the production domain is picked up automatically. Without it, the absolute-URL tags and the sitemap are skipped. After deploying, submit `/sitemap.xml` in Google Search Console.
+The build adds a canonical link, Open Graph and Twitter tags pointing at the social card (`public/og-image.png`), schema.org `Person` and `WebSite` JSON-LD, `robots.txt` and `sitemap.xml`. They use the production address `https://batryzhan.online` (set in `vite-seo.ts`); override it with `SITE_URL=https://other.example npm run build`. After deploying, submit `/sitemap.xml` in Google Search Console.
