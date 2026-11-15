@@ -46,3 +46,20 @@ for (const project of await readdir(PROJECTS_SRC)) {
     }
   }
 }
+
+// Generated 3D renders (Codex + gpt-image) in assets/generated/*.png become
+// <name>-640.webp and <name>-1200.webp in public/images/renders/.
+const GEN_SRC = "assets/generated";
+const GEN_OUT = "public/images/renders";
+await mkdir(GEN_OUT, { recursive: true });
+for (const file of (await readdir(GEN_SRC)).sort()) {
+  if (!/\.png$/i.test(file)) continue;
+  const name = file.replace(/\.png$/i, "");
+  for (const width of [640, 1200]) {
+    const info = await sharp(`${GEN_SRC}/${file}`)
+      .resize({ width, withoutEnlargement: true })
+      .webp({ quality: 82, effort: 6, smartSubsample: true })
+      .toFile(`${GEN_OUT}/${name}-${width}.webp`);
+    console.log(`renders/${name}-${width}.webp: ${info.width}x${info.height}, ${(info.size / 1024).toFixed(0)} KB`);
+  }
+}
