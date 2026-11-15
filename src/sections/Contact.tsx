@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { ExternalLink } from "../components/ExternalLink";
-import { links, person } from "../content";
+import { Check, Copy } from "lucide-react";
+import { ExternalLink } from "@/components/ExternalLink";
+import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { links, person } from "@/content";
 
 export function Contact() {
   const [copied, setCopied] = useState(false);
@@ -21,45 +24,55 @@ export function Contact() {
   };
 
   return (
-    <section id="contact" aria-labelledby="contact-title" className="relative border-t border-trace/60 bg-mask-deep/70 px-4 pb-10 pt-24 sm:px-8 md:pt-32">
+    <section id="contact" aria-labelledby="contact-title" className="mt-12 bg-muted px-4 pb-10 pt-20 sm:px-8 md:pt-28">
       <div className="mx-auto max-w-6xl">
-        <span className="designator" aria-hidden="true">
-          J5
-        </span>
-        <h2 id="contact-title" className="mt-3 max-w-4xl font-display text-[clamp(3rem,9vw,7.5rem)] font-black leading-[0.9] text-silk">
+        <h2 id="contact-title" className="max-w-3xl text-[clamp(2.5rem,6vw,4.75rem)] font-semibold leading-[1.02]">
           Building something with robots or LLMs? Let&rsquo;s talk.
         </h2>
 
-        <div className="mt-12 flex flex-wrap items-center gap-4">
-          <a href={`mailto:${person.email}`} className="trace-link text-2xl font-medium text-gold sm:text-3xl">
-            {person.email}
-          </a>
-          <button
-            type="button"
-            onClick={copy}
-            className="min-h-11 rounded-sm border border-trace px-4 text-sm text-silk-dim transition-colors hover:border-gold hover:text-gold"
-          >
-            {copied ? "Copied" : "Copy email"}
-          </button>
+        <div className="mt-10 flex flex-wrap items-center gap-3">
+          <Button asChild size="lg" className="h-12 px-5 text-base">
+            <a href={`mailto:${person.email}`}>{person.email}</a>
+          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                type="button"
+                variant="outline"
+                size="icon"
+                className="size-12 bg-background"
+                onClick={copy}
+                aria-label="Copy email address"
+              >
+                {copied ? <Check className="text-primary" /> : <Copy />}
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>{copied ? "Copied" : "Copy email"}</TooltipContent>
+          </Tooltip>
           <span className="sr-only" aria-live="polite">
             {copied ? "Email address copied" : ""}
           </span>
         </div>
 
-        <ul className="mt-16 grid gap-px overflow-hidden rounded-md bg-trace/50 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-14 grid gap-px overflow-hidden rounded-xl border bg-border sm:grid-cols-2 lg:grid-cols-5">
           {links.map((link) => (
-            <li key={link.href} className="bg-mask-deep">
-              <ExternalLink href={link.href} className="flex min-h-16 items-baseline justify-between gap-4 px-5 py-5 hover:bg-mask">
-                <span className="text-silk">{link.label}</span>
-                <span className="font-mono text-sm text-silk-dim">{link.handle}</span>
+            <li key={link.href} className="bg-background">
+              <ExternalLink
+                href={link.href}
+                className="flex min-h-20 flex-col justify-center gap-0.5 px-5 py-4 transition-colors hover:bg-accent [background-size:0]"
+              >
+                <span className="font-medium">{link.label}</span>
+                <span className="font-mono text-sm text-muted-foreground">{link.handle}</span>
               </ExternalLink>
             </li>
           ))}
         </ul>
 
-        <footer className="mt-20 flex flex-wrap justify-between gap-4 text-sm text-silk-dim">
-          <p>© {new Date().getFullYear()} {person.name}</p>
-          <p>Built with React and a soldering iron nearby.</p>
+        <footer className="mt-16 flex flex-wrap justify-between gap-4 border-t pt-6 text-sm text-muted-foreground">
+          <p>
+            © {new Date().getFullYear()} {person.name}
+          </p>
+          <p>Built with React, shadcn/ui and a soldering iron nearby.</p>
         </footer>
       </div>
     </section>

@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
-import { Section } from "../components/Section";
-import { achievements } from "../content";
-import { prefersReducedMotion } from "../lib/motion";
+import { Section } from "@/components/Section";
+import { Badge } from "@/components/ui/badge";
+import { achievements } from "@/content";
+import { prefersReducedMotion } from "@/lib/motion";
 
 const TOTAL_PRIZE = achievements.reduce((sum, a) => sum + (a.prize ?? 0), 0);
 const fmt = new Intl.NumberFormat("en-US");
 
-/** Counts up once when scrolled into view; jumps straight to the value for reduced motion. */
-function useCountUp(target: number, duration = 1400) {
+/** Counts up once when scrolled into view; shows the final value for reduced motion. */
+function useCountUp(target: number, duration = 1200) {
   const ref = useRef<HTMLSpanElement>(null);
   const [value, setValue] = useState(0);
   useEffect(() => {
@@ -45,27 +46,31 @@ export function Achievements() {
   const [ref, value] = useCountUp(TOTAL_PRIZE);
   return (
     <Section id="achievements" title="Achievements">
-      <p className="mb-14 max-w-3xl font-display text-[clamp(2.5rem,7vw,5.5rem)] font-bold leading-[0.95] text-silk">
-        <span ref={ref} className="text-gold tabular-nums">
-          {fmt.format(value)}
+      <p className="mb-12 max-w-3xl text-[clamp(1.75rem,4.2vw,3rem)] font-semibold leading-[1.1] tracking-tight">
+        <span ref={ref} className="text-primary">
+          {fmt.format(value)} KZT
         </span>{" "}
-        KZT won at two national hackathons.
+        <span className="text-muted-foreground">won at two national hackathons, plus a national robotics final.</span>
       </p>
 
-      <ol className="border-t border-trace/60">
-        {achievements.map((a) => (
-          <li
-            key={a.title}
-            className="grid gap-x-8 gap-y-1 border-b border-trace/60 py-6 md:grid-cols-[9rem_minmax(0,1fr)_auto] md:items-baseline"
-          >
-            <span className={`font-medium ${a.place === "1st place" ? "text-gold" : "text-silk-dim"}`}>{a.place}</span>
-            <div>
-              <h3 className="text-xl font-semibold text-silk md:text-2xl">{a.title}</h3>
-              <p className="text-silk-dim">{a.detail}</p>
-            </div>
-            {a.prize ? <span className="font-mono text-silk tabular-nums">{fmt.format(a.prize)} KZT</span> : <span />}
-          </li>
-        ))}
+      <ol className="grid gap-px overflow-hidden rounded-xl border bg-border md:grid-cols-3">
+        {achievements.map((a) => {
+          const first = a.place === "1st place";
+          return (
+            <li key={a.title} className="flex flex-col gap-4 bg-background p-6 md:p-7">
+              <Badge variant={first ? "default" : "outline"} className="w-fit">
+                {a.place}
+              </Badge>
+              <div className="flex-1">
+                <h3 className="text-xl font-semibold leading-snug tracking-tight">{a.title}</h3>
+                <p className="mt-1 text-muted-foreground">{a.detail}</p>
+              </div>
+              <p className={first ? "font-mono text-sm tabular-nums" : "font-mono text-sm text-muted-foreground"}>
+                {a.prize ? `${fmt.format(a.prize)} KZT` : "Top 20"}
+              </p>
+            </li>
+          );
+        })}
       </ol>
     </Section>
   );

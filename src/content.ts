@@ -1,3 +1,5 @@
+import type { ProjectSlide } from "./components/ProjectCarousel";
+
 export const person = {
   name: "Batyrzhan Amanbek",
   first: "Batyrzhan",
@@ -28,14 +30,53 @@ export const roles = [
   },
 ];
 
-export const projects = [
+export type Project = {
+  id: string;
+  name: string;
+  expansion: string;
+  body: string;
+  tags: string[];
+  repo: string;
+  slides: ProjectSlide[];
+};
+
+export const projects: Project[] = [
   {
     id: "talos",
     name: "TALOS",
     expansion: "Target-Agent Learning & Operational System",
-    body: "An operational system that lets a group of mobile robots work together to transport goods — and keep delivering even if one robot fails. The swarm at the top of this page is a small sketch of that idea.",
+    body: "An operational system that lets a group of mobile robots split up work and keep going when one of them fails. Robots bid for tasks in an auction; when one drops out, the rest re-plan in seconds. Tested in simulated factory, mine and wildfire scenarios.",
     tags: ["Multi-robot coordination", "Fault tolerance", "Task allocation"],
     repo: "https://github.com/batryzhan/talos",
+    slides: [
+      {
+        src: "/images/projects/talos/factory-960.webp",
+        srcLarge: "/images/projects/talos/factory-1600.webp",
+        largeWidth: 1600,
+        width: 960,
+        height: 600,
+        alt: "TALOS simulator: a factory floor where cutter, welder, mechanic and logistics robots share work, with a fleet telemetry table below.",
+        caption: "Factory: a welder's battery dies mid-shift and a mechanic is reassigned to it.",
+      },
+      {
+        src: "/images/projects/talos/mining-960.webp",
+        srcLarge: "/images/projects/talos/mining-1600.webp",
+        largeWidth: 1600,
+        width: 960,
+        height: 600,
+        alt: "TALOS simulator: a dark mine mapped by LiDAR robots, with collapsed tunnels marked in red.",
+        caption: "Mine: a tunnel collapses and the swarm reroutes around it.",
+      },
+      {
+        src: "/images/projects/talos/rescue-960.webp",
+        srcLarge: "/images/projects/talos/rescue-1600.webp",
+        largeWidth: 1600,
+        width: 960,
+        height: 600,
+        alt: "TALOS simulator: firefighting robots on a hilly forest map with two active fires and a river.",
+        caption: "Wildfire: 24 robots find fires, cut firebreaks and refill at the river.",
+      },
+    ],
   },
   {
     id: "triage",
@@ -44,6 +85,26 @@ export const projects = [
     body: "An AI assistant that sorts Grand Mobile players' support requests, sets their priority, and drafts replies that administrators review before sending.",
     tags: ["LLM", "Classification", "Human in the loop"],
     repo: "https://github.com/BAITC-Hacks/hack-02e066fd-pulsar/",
+    slides: [
+      {
+        src: "/images/projects/pulsar_triage/landing-960.webp",
+        srcLarge: "/images/projects/pulsar_triage/landing-1600.webp",
+        largeWidth: 1440,
+        width: 960,
+        height: 600,
+        alt: "Support Copilot landing page: a large headline over a dark green background and an Open demo button.",
+        caption: "Landing page of the hackathon prototype.",
+      },
+      {
+        src: "/images/projects/pulsar_triage/workspace-960.webp",
+        srcLarge: "/images/projects/pulsar_triage/workspace-1600.webp",
+        largeWidth: 1440,
+        width: 960,
+        height: 600,
+        alt: "Support Copilot admin workspace: a queue of player requests, the selected ticket, and a drafted reply waiting for review.",
+        caption: "Admin workspace: ticket queue, extracted facts and a draft reply that a person approves.",
+      },
+    ],
   },
 ];
 
@@ -58,34 +119,19 @@ export const achievements: Achievement[] = [
   {
     place: "1st place",
     title: "Decentrathon 6.0",
-    detail: "The largest national hackathon, across 19 regions of Kazakhstan",
+    detail: "Across 19 regions of Kazakhstan",
     prize: 500000,
   },
   {
     place: "1st place",
-    title: "KazAtomProm National Hackathon 2026",
-    detail: "National hackathon by KazAtomProm",
+    title: "National Hackathon by KazAtomProm 2026",
+    detail: "National hackathon",
     prize: 100000,
-  },
-  {
-    place: "Award",
-    title: "Programming Mastery Award",
-    detail: "Central Asian FIRST Championship",
   },
   {
     place: "Finalist",
     title: "World Robot Olympiad 2026",
-    detail: "National stage, top 20 projects across Kazakhstan",
-  },
-  {
-    place: "Finalist",
-    title: "International Fizmat AI Olympiad 2025",
-    detail: "Across 9 countries",
-  },
-  {
-    place: "2nd place",
-    title: "CP Open Cup III — 2025",
-    detail: "Competitive programming olympiad, with an education grant from Korkyt Ata Kyzylorda University",
+    detail: "National stage, top 20 across Kazakhstan",
   },
 ];
 
@@ -126,5 +172,4 @@ export const links = [
   { label: "Telegram", handle: "@batryzhan", href: "https://t.me/batryzhan/" },
   { label: "Instagram", handle: "@batryzhan", href: "https://instagram.com/batryzhan/" },
   { label: "Team Pulsar", handle: "@pulsar.ftc", href: "https://instagram.com/pulsar.ftc/" },
-  { label: "TETR.IO", handle: "batryzhan", href: "https://ch.tetr.io/u/batryzhan" },
 ];
