@@ -7,7 +7,7 @@ export function Hero() {
       <div className="mx-auto grid max-w-6xl items-end gap-12 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-16">
         <div>
           <p className="fade-in text-muted-foreground" style={{ animationDelay: "0.5s" }}>
-            {person.age}, from Kyzylorda, Kazakhstan
+            # a young Robotics and NLP enthusiast
           </p>
           <h1 className="mt-5 text-[clamp(3.5rem,10.5vw,8.5rem)] font-bold leading-[0.88] tracking-[-0.045em]">
             <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">

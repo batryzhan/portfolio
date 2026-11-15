@@ -2,11 +2,10 @@ import { Section } from "@/components/Section";
 import { person } from "@/content";
 
 const facts: { k: string; v: string }[] = [
-  { k: "Based in", v: "Kyzylorda, Kazakhstan" },
-  { k: "Works on", v: "Robotics, soldering, LLMs and NLP" },
-  { k: "Day job", v: "Hardware engineer, HubTech KZ" },
-  { k: "Team", v: "Captain of Pulsar, FIRST Tech Challenge" },
-  { k: "Preparing for", v: person.studying.join(", ") },
+  { k: "Living in", v: "Kyzylorda, Kazakhstan" },
+  { k: "Studying at ", v: "Bilim-Innovation Lyceum for gifted boys" },
+  { k: "Focused on  ", v: "Embedded systems, LLMs & swarm robotics" },
+  { k: "Outside work", v: "playing tetris and listening musics"}
 ];
 
 export function About() {
@@ -32,21 +31,6 @@ export function About() {
               </div>
             ))}
           </dl>
-
-          <div className="mt-6 flex items-center gap-4 rounded-xl border bg-muted p-4">
-            <img
-              src="/img/lyceum.webp"
-              alt="Kyzylorda Bilim-Innovation Lyceum logo"
-              width={120}
-              height={120}
-              loading="lazy"
-              className="size-14 shrink-0 rounded-lg bg-background"
-            />
-            <div className="min-w-0">
-              <p className="text-sm text-muted-foreground">Studying, {person.grade}</p>
-              <p className="font-medium leading-snug">{person.school}</p>
-            </div>
-          </div>
         </div>
       </div>
     </Section>

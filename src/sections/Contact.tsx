@@ -71,9 +71,8 @@ export function Contact() {
 
         <footer className="mt-16 flex flex-wrap justify-between gap-4 border-t pt-6 text-sm text-muted-foreground">
           <p>
-            © {new Date().getFullYear()} {person.name}
+             {person.name}
           </p>
-          <p>Built with React, shadcn/ui and a soldering iron nearby.</p>
         </footer>
       </div>
     </section>
