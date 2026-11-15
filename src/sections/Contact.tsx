@@ -59,7 +59,7 @@ export function Contact() {
 
         <footer className="mt-20 flex flex-wrap justify-between gap-4 text-sm text-silk-dim">
           <p>© {new Date().getFullYear()} {person.name}</p>
-          <p>Built with React, Three.js and a soldering iron nearby.</p>
+          <p>Built with React and a soldering iron nearby.</p>
         </footer>
       </div>
     </section>
