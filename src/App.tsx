@@ -1,7 +1,6 @@
 import { Nav } from "./components/Nav";
 import { Hero } from "./sections/Hero";
 import { About } from "./sections/About";
-import { Roles } from "./sections/Roles";
 import { Projects } from "./sections/Projects";
 import { Achievements } from "./sections/Achievements";
 import { Journey } from "./sections/Journey";
@@ -21,7 +20,6 @@ export default function App() {
       <main id="main">
         <Hero />
         <About />
-        <Roles />
         <Projects />
         <Achievements />
         <Journey />
