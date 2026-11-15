@@ -3,13 +3,13 @@ import { person } from "@/content";
 
 export function Hero() {
   return (
-    <section id="top" aria-label="Introduction" className="px-4 pb-16 pt-28 sm:px-8 md:pb-24 md:pt-36">
-      <div className="mx-auto grid max-w-6xl items-end gap-12 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-16">
+    <section id="top" aria-label="Introduction" className="px-4 pb-14 pt-24 sm:px-8 md:pb-16 md:pt-24">
+      <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] md:gap-14">
         <div>
           <p className="fade-in text-muted-foreground" style={{ animationDelay: "0.5s" }}>
             # a young Robotics and NLP enthusiast
           </p>
-          <h1 className="mt-5 text-[clamp(3.5rem,10.5vw,8.5rem)] font-bold leading-[0.88] tracking-[-0.045em]">
+          <h1 className="mt-5 text-[clamp(3.25rem,8.2vw,7.25rem)] font-bold leading-[0.88] tracking-[-0.045em]">
             <span className="-mb-[0.12em] block overflow-hidden pb-[0.12em]">
               <span className="rise">{person.first}</span>
             </span>
@@ -20,8 +20,8 @@ export function Hero() {
             </span>
           </h1>
           <div className="fade-in" style={{ animationDelay: "0.6s" }}>
-            <p className="mt-8 max-w-[34ch] text-xl leading-snug text-foreground/85 md:text-2xl">{person.tagline}</p>
-            <div className="mt-10 flex flex-wrap gap-3">
+            <p className="mt-6 max-w-[34ch] text-xl leading-snug text-foreground/85 md:mt-7 md:text-[1.375rem]">{person.tagline}</p>
+            <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg">
                 <a href="#projects">See my projects</a>
               </Button>
@@ -32,7 +32,7 @@ export function Hero() {
           </div>
         </div>
 
-        <figure className="mx-auto w-full max-w-sm md:max-w-none">
+        <figure className="mx-auto w-full max-w-sm md:max-w-full">
           <img
             src="/img/portrait.webp"
             alt="Portrait of Batyrzhan Amanbek in his lyceum jacket"
@@ -40,7 +40,7 @@ export function Hero() {
             height={1198}
             fetchPriority="high"
             decoding="async"
-            className="aspect-[4/5] w-full rounded-2xl border object-cover object-top"
+            className="aspect-[6/7] w-full rounded-2xl border object-cover object-top md:mx-auto md:w-[min(100%,calc(0.857*clamp(22rem,calc(100svh-13rem),38rem)))]"
           />
           <figcaption className="mt-3 text-sm text-muted-foreground">
             Hardware engineer at HubTech KZ. Captain of robotics team Pulsar.

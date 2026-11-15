@@ -14,9 +14,9 @@ type SectionProps = {
 export function Section({ id, title, lede, children, className }: SectionProps) {
   const headingId = `${id}-title`;
   return (
-    <section id={id} aria-labelledby={headingId} className={cn("px-4 py-20 sm:px-8 md:py-28", className)}>
+    <section id={id} aria-labelledby={headingId} className={cn("px-4 py-10 sm:px-8 md:py-14", className)}>
       <div className="mx-auto max-w-6xl border-t pt-8 md:pt-10">
-        <div className="mb-10 max-w-2xl md:mb-14">
+        <div className="mb-8 max-w-2xl md:mb-10">
           <h2 id={headingId} className="text-4xl font-semibold leading-[1.05] sm:text-5xl">
             {title}
           </h2>

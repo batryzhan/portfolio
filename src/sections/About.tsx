@@ -1,5 +1,4 @@
 import { Section } from "@/components/Section";
-import { person } from "@/content";
 
 const facts: { k: string; v: string }[] = [
   { k: "Living in", v: "Kyzylorda, Kazakhstan" },

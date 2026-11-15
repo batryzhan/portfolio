@@ -58,6 +58,16 @@ export function Achievements() {
           const first = a.place === "1st place";
           return (
             <li key={a.title} className="flex flex-col gap-4 bg-background p-6 md:p-7">
+              <img
+                src={a.image.src}
+                width={a.image.w}
+                height={a.image.h}
+                alt={a.image.alt}
+                loading="lazy"
+                decoding="async"
+                style={{ objectPosition: a.image.position }}
+                className="aspect-[4/3] w-full rounded-lg object-cover"
+              />
               <Badge variant={first ? "default" : "outline"} className="w-fit">
                 {a.place}
               </Badge>
@@ -65,8 +75,11 @@ export function Achievements() {
                 <h3 className="text-xl font-semibold leading-snug tracking-tight">{a.title}</h3>
                 <p className="mt-1 text-muted-foreground">{a.detail}</p>
               </div>
-              <p className={first ? "font-mono text-sm tabular-nums" : "font-mono text-sm text-muted-foreground"}>
-                {a.prize ? `${fmt.format(a.prize)} KZT` : "Top 20"}
+              <p className="mt-2 flex items-baseline justify-between border-t pt-4 font-mono text-sm">
+                <span className="text-muted-foreground">{a.prize ? "Prize" : "Result"}</span>
+                <span className={first ? "tabular-nums" : "text-muted-foreground"}>
+                  {a.prize ? `${fmt.format(a.prize)} KZT` : "Top 20"}
+                </span>
               </p>
             </li>
           );

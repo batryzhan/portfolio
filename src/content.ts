@@ -22,8 +22,8 @@ export const roles = [
   {
     id: "team",
     title: "Captain, robotics team Pulsar",
-    org: "@pulsar.ftc",
-    href: "https://instagram.com/pulsar.ftc/",
+    org: "@pulsar_ftc",
+    href: "https://instagram.com/pulsar_ftc/",
     body: "Leading a FIRST Tech Challenge team: splitting the build, keeping the code honest, and getting the robot to the field on time.",
   },
 ];
@@ -123,6 +123,7 @@ export type Achievement = {
   title: string;
   detail: string;
   prize?: number;
+  image: { src: string; w: number; h: number; alt: string; position?: string };
 };
 
 export const achievements: Achievement[] = [
@@ -131,17 +132,37 @@ export const achievements: Achievement[] = [
     title: "Decentrathon 6.0",
     detail: "Across 19 regions of Kazakhstan",
     prize: 500000,
+    image: {
+      src: "/img/achievement-decentrathon.webp",
+      w: 1000,
+      h: 561,
+      alt: "Teammates working on laptops and eating pizza at Decentrathon 6.0",
+    },
   },
   {
     place: "1st place",
     title: "National Hackathon by KazAtomProm 2026",
     detail: "National hackathon",
     prize: 100000,
+    image: {
+      src: "/img/achievement-kazatomprom.webp",
+      w: 1000,
+      h: 644,
+      alt: "Group photo of participants holding KazAtomProm banners in the company lobby",
+      position: "50% 35%",
+    },
   },
   {
     place: "Finalist",
     title: "World Robot Olympiad 2026",
     detail: "National stage, top 20 across Kazakhstan",
+    image: {
+      src: "/img/achievement-wro.webp",
+      w: 967,
+      h: 1198,
+      alt: "Two teammates in front of the World Robot Olympiad 2026 banner",
+      position: "50% 30%",
+    },
   },
 ];
 
@@ -180,6 +201,4 @@ export const links = [
   { label: "GitHub", handle: "batryzhan", href: "https://github.com/batryzhan/" },
   { label: "LinkedIn", handle: "in/batryzhan", href: "https://linkedin.com/in/batryzhan/" },
   { label: "Telegram", handle: "@batryzhan", href: "https://t.me/batryzhan/" },
-  { label: "Instagram", handle: "@batryzhan", href: "https://instagram.com/batryzhan/" },
-  { label: "Team Pulsar", handle: "@pulsar.ftc", href: "https://instagram.com/pulsar.ftc/" },
-];
+  { label: "Instagram", handle: "@batryzhan", href: "https://instagram.com/batryzhan/" },];
