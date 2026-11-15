@@ -1,36 +1,94 @@
 import { describe, expect, it } from "vitest";
-import { COLS, ROWS, drop, emptyBoard } from "./tetris";
+import { apm, BUFFER_ROWS, cellsOf, COLS, createBag, ghostY, hardDrop, hold, move, newGame, pps, rotate, step, VISIBLE_ROWS, type GameState, type PieceKind } from "./tetris";
 
-describe("drop", () => {
-  it("lands a piece on the floor", () => {
-    const res = drop(emptyBoard(), "O", 0, 1)!;
-    expect(res.board[ROWS - 1][0]).toEqual({ kind: "O", id: 1 });
-    expect(res.board[ROWS - 2][1]).toEqual({ kind: "O", id: 1 });
-    expect(res.cleared).toBe(0);
-  });
+const rows = BUFFER_ROWS + VISIBLE_ROWS;
+const withPiece = (state: GameState, kind: PieceKind, x = 3, y = 0): GameState =>
+  ({ ...state, active: { kind, rotation: 0, x, y } });
 
-  it("stacks pieces on top of each other", () => {
-    const a = drop(emptyBoard(), "O", 0, 1)!;
-    const b = drop(a.board, "O", 0, 2)!;
-    expect(b.board[ROWS - 3][0]?.id).toBe(2);
+describe("Tetris engine", () => {
+  it("deals every piece once in each bag and keeps five previews", () => {
+    const bag = createBag(() => 0.4);
+    for (let n = 0; n < 3; n++) {
+      expect(new Set(Array.from({ length: 7 }, () => bag.next().value))).toEqual(new Set(["I", "O", "T", "S", "Z", "J", "L"]));
+    }
+    let state = newGame(() => 0.5);
+    for (let i = 0; i < 10 && !state.gameOver; i++) {
+      expect(state.queue.length).toBeGreaterThanOrEqual(5);
+      state = hardDrop(state);
+    }
   });
+  it("hard drops onto the floor without modifying the original board", () => {
+    const state = withPiece(newGame(() => 0), "O");
+    const result = hardDrop(state);
+    expect(result.board[rows - 1].slice(4, 6)).toEqual(["O", "O"]);
+    expect(result.board[rows - 2].slice(4, 6)).toEqual(["O", "O"]);
+    expect(state.board.flat().every(cell => cell === null)).toBe(true);
+    expect(result.piecesPlaced).toBe(1);
+  });
+  it("clears a completed row", () => {
+    const state = withPiece(newGame(() => 0), "I");
+    state.board[rows - 1] = Array.from({ length: COLS }, (_, x) => x >= 3 && x <= 6 ? null : "J");
+    const result = hardDrop(state);
+    expect(result.lines).toBe(1);
+    expect(result.board[rows - 1].every(cell => cell === null)).toBe(true);
+  });
+  it("holds once per piece and respawns swapped pieces", () => {
+    const state = newGame(() => 0);
+    const first = state.active.kind;
+    const held = hold(state);
+    expect(held.hold).toBe(first);
+    expect(held.canHold).toBe(false);
+    expect(hold(held)).toEqual(held);
+    const locked = hardDrop(held);
+    const swapped = hold(locked);
+    expect(swapped.active).toEqual({ kind: first, rotation: 0, x: 3, y: 0 });
+    expect(swapped.hold).toBe(locked.active.kind);
+  });
+  it("ghost matches the hard-drop landing position", () => {
+    const state = withPiece(newGame(() => 0), "T");
+    state.board[rows - 1][4] = "Z";
+    const y = ghostY(state);
+    const result = hardDrop(state);
+    for (const [x, dy] of cellsOf("T", 0)) expect(result.board[y + dy][state.active.x + x]).toBe("T");
+  });
+  it("uses the I wall kick when rotating beside a wall", () => {
+    let state = withPiece(newGame(() => 0), "I");
+    state = rotate(state, 1);
+    for (let i = 0; i < 5; i++) state = move(state, -1);
+    expect(state.active.x).toBe(-2);
+    const result = rotate(state, -1);
+    expect(result.active.rotation).toBe(0);
+    expect(result.active.x).toBe(0);
+  });
+  it("ends the game when the next spawn is obstructed", () => {
+    const state = withPiece(newGame(() => 0), "O", 0);
+    for (let x = 3; x <= 6; x++) state.board[1][x] = "Z";
+    expect(hardDrop(state).gameOver).toBe(true);
+  });
+  it("reports finite rates and advances elapsed time", () => {
+    const state = newGame(() => 0);
+    expect(pps(state)).toBe(0);
+    expect(apm(state)).toBe(0);
+    const timed = step({ ...state, piecesPlaced: 2, attack: 3 }, 1000);
+    expect(pps(timed)).toBe(2);
+    expect(apm(timed)).toBe(180);
+  });
+  it("locks after 500 ms grounded and resets delay on a grounded move", () => {
+    const state = withPiece(newGame(() => 0), "O", 3, rows - 2);
+    const waiting = step(state, 400);
+    expect(waiting.piecesPlaced).toBe(0);
+    const moved = move(waiting, 1);
+    expect(moved.lockResets).toBe(1);
+    expect(step(moved, 499).piecesPlaced).toBe(0);
+    expect(step(moved, 500).piecesPlaced).toBe(1);
+  });
+});
 
-  it("clamps a piece that would hang off the right wall", () => {
-    const res = drop(emptyBoard(), "I", COLS - 1, 1)!;
-    expect(res.board[ROWS - 1].slice(COLS - 4).every((c) => c?.id === 1)).toBe(true);
-  });
 
-  it("clears a full row", () => {
-    let board = drop(emptyBoard(), "O", 0, 1)!.board;
-    board = drop(board, "O", 2, 2)!.board;
-    const res = drop(board, "O", 4, 3)!;
-    expect(res.cleared).toBe(2);
-    expect(res.board.flat().every((c) => c === null)).toBe(true);
-  });
-
-  it("returns null when the well is full at the spawn point", () => {
-    let board = emptyBoard();
-    for (let i = 0; i < ROWS / 2; i++) board = drop(board, "O", 0, i)!.board;
-    expect(drop(board, "O", 0, 99)).toBeNull();
-  });
+it("uses the existing upward 180 kick when the direct rotation is obstructed", () => {
+  const state = withPiece(newGame(() => 0), "T", 3, 5);
+  state.board[7][4] = "J";
+  const result = rotate(state, 2);
+  expect(result.active.rotation).toBe(2);
+  expect(result.active.y).toBe(4);
 });
