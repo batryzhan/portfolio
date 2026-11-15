@@ -1,4 +1,17 @@
 node_modules
 dist
 *.tsbuildinfo
-.impeccable/hook.cache.json
+
+# Local tooling, agent config and caches
+.claude/
+.impeccable/
+
+# Private planning and design docs
+docs/superpowers/
+plans/
+specs/
+
+# Secrets and local environment
+.env
+.env.*
+*.local
